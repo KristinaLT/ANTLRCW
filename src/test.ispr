@@ -1,16 +1,6 @@
-VAR x, squ;
-
-PROCEDURE square;
+VAR float x = 3.0;
+VAR float y = 3.0;
 BEGIN
- squ:= x * x
-END;
-
-BEGIN
- x := 1;
- WHILE x <= 10 DO
- BEGIN
- CALL square;
- ! squ;
- x := x + 1
- END
+ y:=x+x;
+ x:=1
 END.

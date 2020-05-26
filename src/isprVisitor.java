@@ -1,4 +1,4 @@
-// Generated from C:/ANTLRCW/src\ispr.g4 by ANTLR 4.8
+// Generated from C:/Users/Кристина/IdeaProjects/ANTLRCW/src\ispr.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -33,6 +33,12 @@ public interface isprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVars(isprParser.VarsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link isprParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(isprParser.TypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link isprParser#procedure}.
 	 * @param ctx the parse tree
@@ -106,23 +112,62 @@ public interface isprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCondition(isprParser.ConditionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link isprParser#expression}.
+	 * Visit a parse tree produced by the {@code MultExpr}
+	 * labeled alternative in {@link isprParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpression(isprParser.ExpressionContext ctx);
+	T visitMultExpr(isprParser.MultExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link isprParser#term}.
+	 * Visit a parse tree produced by the {@code FactorExp}
+	 * labeled alternative in {@link isprParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTerm(isprParser.TermContext ctx);
+	T visitFactorExp(isprParser.FactorExpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SummExpr}
+	 * labeled alternative in {@link isprParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSummExpr(isprParser.SummExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link isprParser#expressionunion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressionunion(isprParser.ExpressionunionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link isprParser#factor}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitFactor(isprParser.FactorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link isprParser#literal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLiteral(isprParser.LiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link isprParser#integerLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntegerLiteral(isprParser.IntegerLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link isprParser#floatLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFloatLiteral(isprParser.FloatLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link isprParser#charLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCharLiteral(isprParser.CharLiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link isprParser#ident}.
 	 * @param ctx the parse tree

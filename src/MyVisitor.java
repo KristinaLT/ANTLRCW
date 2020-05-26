@@ -1,5 +1,4 @@
-import isprBaseVisitor;
-import isprParser;
+
 import java.util.HashMap;
 import java.util.Stack;
 import java.lang.Override;
@@ -7,7 +6,8 @@ import java.lang.Override;
 
 public class MyVisitor extends isprBaseVisitor<Object> {
     HashMap<String, Object> consts = new HashMap<>();
-    Stack<HashMap<String, Object>> functionTables = new Stack<>();
+    HashMap<String, isprParser.BlockContext> function = new HashMap<>();
+   // Stack<HashMap<String, Object>> functionTables = new Stack<>();
     Stack<HashMap<String, Object>> tables = new Stack<>();
     Stack<HashMap<String, Object>> currentStack;
     HashMap<String, Object> currentTable;
@@ -26,49 +26,31 @@ public class MyVisitor extends isprBaseVisitor<Object> {
 
         throw new Exception("No such variable in the table");
     }
+
     @Override
-    //public String visitIfstmt(isprParser.IfstmtContext ctx) {
-//        System.out.println("begin if :");
-//        String conclusionResult = (String)visit(ctx.conditionunion());
-//        if (conclusionResult.equals("true")) {
-//            currentStack.push(currentTable);
-//            visit(ctx.block(0));
-//            currentTable = currentStack.pop();
-//        }
-//        return null;
-//    }
-//    public String visitConditionunion(isprParser.ConditionunionContext ctx) {
-//        for (int i = 0; i < ctx.condition().size(); i++) {
-//            String result = (String) visitChildren(ctx);
-//            if (result == null) {
-//                System.err.println("Conclusion NULL exception");
-//        System.exit(1);
-//            }
-//            if (result.equals("false")) return "false";
-//        }
-//        return "true";
-//    }
-//
-//    @Override
-//    public String  visitCondition(kidParser.ConditionContext ctx) {
-//        return null;
-//    }
+    public Object visitProcedure(isprParser.ProcedureContext ctx) {
+        String ident = ctx.ident().getText();
+        function.put(ident, ctx.block());
+        return null;
+    }
 
-//    @Override
-//    public String visitSummExpression(kidParser.SummExpressionContext ctx) {
-//        Object left = new Object(visit(ctx.getChild()));
-//        String right = new String(visit(ctx);
-//        switch (ctx.term().toString()) {
-//            case "+":
-//                return String.valueOf(left + right);
-//
-//            case "-": {
-//                return String.valueOf(left - right);
-//            }
-//
-//        }
-//    }
+    private void callProcedure(String ident) throws Exception{
+        if (function.containsKey(ident)) {
+            visit(function.get(ident));
+        }
+        else throw new Exception("Procedure" + ident + " is not identified");
+    }
 
+    @Override
+    public Object visitCallstmt(isprParser.CallstmtContext ctx) {
+        try {
+            callProcedure(ctx.ident().getText());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     @Override
     public String  visitConsts(isprParser.ConstsContext ctx) {
         currentTable = consts;
@@ -95,61 +77,143 @@ public class MyVisitor extends isprBaseVisitor<Object> {
 
     @Override
     public String visitStatement (isprParser.StatementContext ctx){
+
         return (String) visitChildren(ctx);
     }
 
-    //    @Override Object visitFunctions(kidParser.FunctionsContext ctx)
-//    {
-//
-//    }
+
     @Override
-    public Object visitVars (isprParser.VarsContext ctx){
-        String varName = ctx.ident().getText();
-        String type = ctx.type().get();
-        Object value = visit(ctx.expression());
-        if (ctx.children.contains(ctx.expression()))
-            value = visit(ctx.expression());
-        currentTable.put(varName, value);
-        if (value != null)
-            System.out.println("Vars: " + type + " " + varName + " " + value.toString());
-        else
-            System.out.println("VarDeclaration (no value): " + type + " " + varName + " as NULL");
+    public String  visitAssignstmt(isprParser.AssignstmtContext ctx) {
+        try {
+            String varName = ctx.ident().getText();
+            Object exp = visit(ctx.expression());
 
-        currentTable.put(varName, value);
-
+            currentTable.put(varName, exp);
+            System.out.println("Assigment " + varName + ": " + exp);
+        } catch (Exception e) {
+            System.out.println("!!!Error!!!");
+            System.out.println(e.fillInStackTrace());
+        }
         return null;
     }
-//    @Override
-//    public String visitExpressionunion(isprParser.ExpressionunionContext ctx) {
-//      StringBuilder result = new StringBuilder();
-//        for (int i = 0; i < ctx.expression().size(); i ++) {
-//            result.append(visit(ctx.expression(i)));
-//            result.append(" ");
-//        }
-//        return result.toString();
-//    }
-    //@Override
-////    public String visitWritestmt(kidParser.WritestmtContext ctx) {
-////       // ArrayList<Object> expList = (ArrayList<Object>) visit(ctx.expressionunion());
-////       // String expList=ctx.getText();
-////    String write =  visit(ctx.expressionunion());
-////    System.out.println("write( " + write + ")");
-////    return null;
-////}
+
+
+   @Override
+    public String visitFactor (isprParser.FactorContext ctx){
+        if (ctx.ident()!= null) return ctx.ident().STRING().getText();
+        return ctx.getText();
+    }
+
+   /* @Override
+    public Object visitVars(isprParser.VarsContext ctx) {
+        visitChildren(ctx);
+        return null;
+    }*/
+   @Override
+   public Object visitVars (isprParser.VarsContext ctx){
+       String varName = ctx.ident().getText();
+       String type = ctx.type().getText();
+       Object value = visit(ctx.expression());
+       if (ctx.children.contains(ctx.expression()))
+           value = visit(ctx.expression());
+       currentTable.put(varName, value);
+       if (value != null)
+           System.out.println("Vars: " + type + " " + varName + " " + value.toString());
+       else
+           System.out.println("VarDeclaration (no value): " + type + " " + varName + " as NULL");
+
+       currentTable.put(varName, value);
+
+       return null;
+   }
+
+
+    @Override
+    public String visitSummExpr(isprParser.SummExprContext ctx) {
+        Object left = visit(ctx.expression(0));
+        String sub = ".";
+        Object right;
+        float summf = 0;
+        float differf = 0;
+        int summi = 0;
+        int differi = 0;
+        boolean flag = false;
+        // Object left = ctx.expression(0).getText();
+        if (ctx.expression(1) != null) {
+            right = visit(ctx.expression(1));
+        } else {
+            right = new String("0");
+        }
+        String sl = left.toString();
+        String sr = right.toString();
+        //System.out.println(sl+" +++++"+sr);
+        if (sl.indexOf(sub) != -1 || sr.indexOf(sub) != -1) {
+              System.out.println(sl+" +++++"+sr);
+            flag = true;
+            float leftfloat = Float.parseFloat(left.toString());
+            float rightfloat = Float.parseFloat(right.toString());
+            summf = leftfloat + rightfloat;
+            differf = leftfloat - rightfloat;
+            //delwithpointf = leftfloat % rightfloat;
+            //System.out.println("float0 "+ delwithpointf+"  "+leftfloat+" % "+rightfloat);
+
+        } else {
+            // System.out.println(sl+" ----------"+sr);
+            flag = false;
+            int leftint = Integer.parseInt(left.toString());
+            int rightint = Integer.parseInt(right.toString());
+            summi = leftint + rightint;
+            differi = leftint - rightint;
+            // delwithpointi = leftint%rightint;
+            //  System.out.println("int0 "+ delwithpointi);
+        }
+        //System.out.println(left+"  "+right);
+//        int leftint=Integer.parseInt(left.toString());
+//        int rightint=Integer.parseInt(right.toString());
+//        int summ=leftint+rightint;
+//        int razn=leftint-rightint;
+        // System.out.println(leftint+"  "+rightint+" = "+summ);
+        // System.out.println(ctx.expression(0).getText()+" CTX");
+        //System.out.println(ctx.op.getText()+" CTX");
+        switch (ctx.op.getText()) {
+            case "+":
+                //  System.out.println(sl+" *"+sr);
+               // currentTable.put(exp);
+                if (flag == true)
+                    return String.valueOf(summf);
+                else
+                    return String.valueOf(summi);
+            case "-": {
+                //System.out.println(sl+" /"+sr);
+                if (flag == true)
+                    //currentTable.put(VarName, exp);
+                    return String.valueOf(differf);
+                else
+                    return String.valueOf(differi);
+            }
+        }
+        return null;
+    }
+
     @Override
     public String visitWritestmt(isprParser.WritestmtContext ctx) {
         String toPrint = (String) visit(ctx.expressionunion());
+      //  toPrint +=(String)visit(ctx.ident());
+
         System.out.println("write( " + toPrint + ")");
         return null;
     }
-    //        String toPrint = "";
-//        for (Object e : expList){
-//            toPrint += e.toString() + " ";
-//        }
-//        System.out.println("write( " + toPrint + ")");
-//        return null;
-//    }
     @Override
+    public String visitExpressionunion(isprParser.ExpressionunionContext ctx) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < ctx.expression().size(); i ++) {
+            result.append(visit(ctx.expression(i)));
+            result.append(" ");
+        }
+        return result.toString();
+    }
+
+   @Override
     public Object visitIdent (isprParser.IdentContext ctx) {
         try {
             System.out.println("GetVariable:" + ctx.getText() + " is: " + getVariable(ctx.getText()));
@@ -159,30 +223,14 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         }
         return null;
     }
-    @Override
-    public String  visitAssignstmt(isprParser.AssignstmtContext ctx) {
-        try {
-            String varName = ctx.ident().getText();
-            Object exp = (Object) visit(ctx.expression());
-
-            currentTable.put(varName, exp);
-            System.out.println("Assigment: " + varName + " " + exp);
-        } catch (Exception e) {
-            System.out.println("!!!Error!!!");
-            System.out.println(e.fillInStackTrace());
-        }
-        return null;
-    }
-
-
-    @Override
-    public String visitFactor (isprParser.FactorContext ctx){
-        if (ctx.ident()!= null) return ctx.ident().STRING().getText();
+ @Override
+    public String visitLiteral (isprParser.LiteralContext ctx){
+        if (ctx.charLiteral()!= null) return ctx.charLiteral().STRING().getText();
         return ctx.getText();
     }
 
-    @Override
-    public Object visitFLOAT (isprParser.FLOAT ctx){
+ @Override
+    public Object visitFloatLiteral (isprParser.FloatLiteralContext ctx){
         System.out.println("Float: " + ctx.getText());
         return Float.parseFloat(ctx.getText());
     }
@@ -194,10 +242,5 @@ public class MyVisitor extends isprBaseVisitor<Object> {
     }
 
 
-  //  @Override
-//    public Object visitCharLiteral (isprParser.identContext ctx){
-//        System.out.println("Char: " + ctx.getText());
-//        return new Character(ctx.STRING().getText().charAt(0));
-//    }
 
 }

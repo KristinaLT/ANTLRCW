@@ -1,21 +1,26 @@
 grammar ispr;
 
-program
+    program
    : block '.'
    ;
 
 block
-   : consts? vars? procedure* statement
+   : consts? (vars*)? (procedure*)? statement
    ;
 
 consts
-   : CONST ident '=' (INTEGER | FLOAT) (',' ident '=' (INTEGER | FLOAT))* ';'
+   : CONST vars   (';' CONST vars) * ';'
    ;
 
 vars
-   : VAR ident ('=' (INTEGER | FLOAT))? (',' ident ('=' (INTEGER | FLOAT))?)* ';'
+   :  VAR type ident ('=' expression)? ';'
    ;
 
+type
+    : 'char'
+    | 'int'
+    | 'float'
+    ;
 procedure
    : PROCEDURE ident ';' block ';'
    ;
@@ -33,9 +38,8 @@ callstmt
    ;
 
 writestmt
-   : WRITE ident
+   : WRITE '(' expressionunion ')'
    ;
-
 
 bangstmt
    : '!' expression
@@ -66,28 +70,25 @@ condition
    ;
 
 expression
-   : ('+' | '-')? term (('+' | '-') term)*
+   :
+    factor #FactorExp
+   |expression op=('+' | '-') expression # SummExpr
+   |expression op=('*' | '/') expression # MultExpr
    ;
 
-term
-   : factor (('*' | '/') factor)*
+expressionunion
+   : (expression(',' expression)*)?
    ;
 
 factor
    : ident
    | number
-   | INTEGER
-   | FLOAT
-   | '(' expression ')'
+   | literal
+   | '(' factor')'
+   | assignstmt
    ;
 
-ident
-   : STRING
-   ;
 
-number
-   : NUMBER
-   ;
 
 BREAK
    : 'BREAK'
@@ -158,19 +159,30 @@ PROCEDURE
    : 'PROCEDURE'
    ;
 
-FLOAT
-   : '-'? NUMBER'.'NUMBER
+   literal
+   	:	integerLiteral
+   	|	floatLiteral
+   	|	charLiteral
+   	;
+   	integerLiteral
+        :   NUMBER
+        ;
+    floatLiteral
+        :  NUMBER '.' NUMBER*
+        ;
+    charLiteral
+        :'\'' STRING '\''
+        ;
+ident
+   : STRING
    ;
 
-INTEGER
-   : '-'? NUMBER
+number
+   : NUMBER
    ;
-
-
 STRING
    : [a-zA-Z] [a-zA-Z]*
    ;
-
 
 NUMBER
    : [0-9] +
@@ -186,8 +198,6 @@ LineComment
         -> skip
     ;
 
-
 WS
    : [ \t\r\n] -> skip
    ;
-

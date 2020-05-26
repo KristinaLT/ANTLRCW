@@ -1,4 +1,4 @@
-// Generated from C:/ANTLRCW/src\ispr.g4 by ANTLR 4.8
+// Generated from C:/Users/Кристина/IdeaProjects/ANTLRCW/src\ispr.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -46,6 +46,16 @@ public interface isprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVars(isprParser.VarsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link isprParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterType(isprParser.TypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link isprParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitType(isprParser.TypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link isprParser#procedure}.
 	 * @param ctx the parse tree
@@ -167,25 +177,51 @@ public interface isprListener extends ParseTreeListener {
 	 */
 	void exitCondition(isprParser.ConditionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link isprParser#expression}.
+	 * Enter a parse tree produced by the {@code MultExpr}
+	 * labeled alternative in {@link isprParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpression(isprParser.ExpressionContext ctx);
+	void enterMultExpr(isprParser.MultExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link isprParser#expression}.
+	 * Exit a parse tree produced by the {@code MultExpr}
+	 * labeled alternative in {@link isprParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpression(isprParser.ExpressionContext ctx);
+	void exitMultExpr(isprParser.MultExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link isprParser#term}.
+	 * Enter a parse tree produced by the {@code FactorExp}
+	 * labeled alternative in {@link isprParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterTerm(isprParser.TermContext ctx);
+	void enterFactorExp(isprParser.FactorExpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link isprParser#term}.
+	 * Exit a parse tree produced by the {@code FactorExp}
+	 * labeled alternative in {@link isprParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitTerm(isprParser.TermContext ctx);
+	void exitFactorExp(isprParser.FactorExpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code SummExpr}
+	 * labeled alternative in {@link isprParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSummExpr(isprParser.SummExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SummExpr}
+	 * labeled alternative in {@link isprParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSummExpr(isprParser.SummExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link isprParser#expressionunion}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpressionunion(isprParser.ExpressionunionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link isprParser#expressionunion}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpressionunion(isprParser.ExpressionunionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link isprParser#factor}.
 	 * @param ctx the parse tree
@@ -196,6 +232,46 @@ public interface isprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFactor(isprParser.FactorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link isprParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteral(isprParser.LiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link isprParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteral(isprParser.LiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link isprParser#integerLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntegerLiteral(isprParser.IntegerLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link isprParser#integerLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntegerLiteral(isprParser.IntegerLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link isprParser#floatLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloatLiteral(isprParser.FloatLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link isprParser#floatLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloatLiteral(isprParser.FloatLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link isprParser#charLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterCharLiteral(isprParser.CharLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link isprParser#charLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitCharLiteral(isprParser.CharLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link isprParser#ident}.
 	 * @param ctx the parse tree
