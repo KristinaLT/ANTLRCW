@@ -98,11 +98,11 @@ public class MyVisitor extends isprBaseVisitor<Object> {
     }
 
 
-   @Override
+   /*@Override
     public String visitFactor (isprParser.FactorContext ctx){
         if (ctx.ident()!= null) return ctx.ident().STRING().getText();
         return ctx.getText();
-    }
+    }*/
 
    /* @Override
     public Object visitVars(isprParser.VarsContext ctx) {

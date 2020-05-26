@@ -1,6 +1,6 @@
 VAR float x = 3.0;
 VAR float y = 3.0;
 BEGIN
- y:=x+x;
- x:=1
+ y := x - x;
+ y := 2.0 - x + 1.0;
 END.
