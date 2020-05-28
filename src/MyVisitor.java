@@ -68,7 +68,6 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         HashMap<String, Object> currentBlocktable = new HashMap<>();
         currentTable = currentBlocktable;
         visitChildren(ctx);
-        //tables.add(currentBlocktable);
 
         return null;
     }
@@ -268,6 +267,111 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         return Integer.parseInt(ctx.getText());
     }
 
+    @Override
+    public String visitIfstmt(isprParser.IfstmtContext ctx) {
+        System.out.println("if:");
+        Object conditionResult = visit(ctx.conditionunion());
+        if (conditionResult.equals("true")) {
+            visit(ctx.statement(0));
+            visitChildren(ctx);
+        }
+        return null;
+    }
+
+
+    @Override
+    public String visitConditionunion(isprParser.ConditionunionContext ctx) {
+        for (int i = 0; i < ctx.condition().size(); i++) {
+            Object result = visitChildren(ctx);
+            if (result == null) {
+                System.err.println("Conclusion NULL exception");
+                System.exit(1);
+            }
+            if (result.equals("false")) return "false";
+        }
+        return "true";
+    }
+
+    @Override
+    public String visitComparison(isprParser.ComparisonContext ctx) {
+        Object left = visit(ctx.expression(0));
+        Object right = visit(ctx.expression(1));
+        String sub = ".";
+        boolean flag = false;
+
+        String sl = left.toString();
+        String sr = right.toString();
+        if (sl.indexOf(sub) != -1 || sr.indexOf(sub) != -1)
+            flag = true;
+        else {
+            flag = false;
+        }
+
+        switch (ctx.op.getText()) {
+            case "=":
+                if (flag == true) {
+                    if (Float.parseFloat(left.toString()) == Float.parseFloat(right.toString()))
+                        return "true";
+                    else return "false";
+                } else {
+                    if (Integer.parseInt(left.toString()) == Integer.parseInt(right.toString()))
+                        return "true";
+                    else return "false";
+                }
+
+            case "!=":
+                if (flag == true) {
+                    if (Float.parseFloat(left.toString()) != Float.parseFloat(right.toString()))
+                        return "true";
+                    else return "false";
+                } else {
+                    if (Integer.parseInt(left.toString()) != Integer.parseInt(right.toString()))
+                        return "true";
+                    else return "false";
+                }
+            case "<":
+                if (flag == true) {
+                    if (Float.parseFloat(left.toString()) < Float.parseFloat(right.toString()))
+                        return "true";
+                    else return "false";
+                } else {
+                    if (Integer.parseInt(left.toString()) < Integer.parseInt(right.toString()))
+                        return "true";
+                    else return "false";
+                }
+            case "<=":
+                if (flag == true) {
+                    if (Float.parseFloat(left.toString()) <= Float.parseFloat(right.toString()))
+                        return "true";
+                    else return "false";
+                } else {
+                    if (Integer.parseInt(left.toString()) <= Integer.parseInt(right.toString()))
+                        return "true";
+                    else return "false";
+                }
+            case ">":
+                if (flag == true) {
+                    if (Float.parseFloat(left.toString()) > Float.parseFloat(right.toString()))
+                        return "true";
+                    else return "false";
+                } else {
+                    if (Integer.parseInt(left.toString()) > Integer.parseInt(right.toString()))
+                        return "true";
+                    else return "false";
+                }
+            case ">=":
+                if (flag == true) {
+                    if (Float.parseFloat(left.toString()) >= Float.parseFloat(right.toString()))
+                        return "true";
+                    else return "false";
+                } else {
+                    if (Integer.parseInt(left.toString()) >= Integer.parseInt(right.toString()))
+                        return "true";
+                    else return "false";
+                }
+        }
+        return null;
+    }
 
 
 

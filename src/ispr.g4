@@ -8,6 +8,7 @@ block
    : consts? (vars*)? (procedure*)? statement
    ;
 
+
 consts
    : CONST vars   (';' CONST vars) * ';'
    ;
@@ -50,7 +51,7 @@ beginstmt
    ;
 
 ifstmt
-   : IF condition THEN statement
+   : IF conditionunion THEN statement (';' statement)* END
    ;
 
 whilestmt
@@ -64,16 +65,20 @@ breakstmt
 continuestmt
    : CONTINUE;
 
+conditionunion
+   :condition (opp = ('and'|'or')condition)*
+   ;
+
 condition
-   : ODD expression
-   | expression ('=' | '!=' | '<' | '<=' | '>' | '>=') expression
+   : expression # ExpCond
+   | expression op = ('=' | '!=' | '<' | '<=' | '>' | '>=') expression # Comparison
    ;
 
 expression
    :
     factor #FactorExp
-   |expression op=('+' | '-') expression # SummExpr
-   |expression op=('*' | '/') expression # MultExpr
+   |expression op = ('+' | '-') expression # SummExpr
+   |expression op = ('*' | '/') expression # MultExpr
    ;
 
 expressionunion
@@ -123,12 +128,6 @@ IF
 THEN
    : 'THEN'
    ;
-
-
-ODD
-   : 'ODD'
-   ;
-
 
 BEGIN
    : 'BEGIN'
