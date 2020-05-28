@@ -1,7 +1,7 @@
 VAR int squ = 3;
 VAR int x = 2;
 BEGIN
-    IF x > squ THEN
+    IF x > squ THEN BEGIN
         squ:= x * 2;
         x := 2 * squ;
     END;

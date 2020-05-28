@@ -51,7 +51,7 @@ beginstmt
    ;
 
 ifstmt
-   : IF conditionunion THEN statement (';' statement)* END
+   : IF conditionunion THEN BEGIN statement (';' statement)* END
    ;
 
 whilestmt
