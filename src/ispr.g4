@@ -66,7 +66,7 @@ continuestmt
    : CONTINUE;
 
 conditionunion
-   :condition (opp = ('and'|'or')condition)*
+   :condition (opp = ('AND'|'OR')condition)*
    ;
 
 condition
