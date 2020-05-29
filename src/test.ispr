@@ -1,7 +1,8 @@
 VAR int squ = 3;
 VAR int x = 2;
+VAR int y = 1;
 BEGIN
-    IF x > squ THEN BEGIN
+    IF x < squ AND y < x THEN BEGIN
         squ:= x * 2;
         x := 2 * squ;
     END;

@@ -44,7 +44,7 @@ public class isprParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'.'", "';'", "'='", "'char'", "'int'", "'float'", "':='", "'('", 
-			"')'", "'!'", "'and'", "'or'", "'!='", "'<'", "'<='", "'>'", "'>='", 
+			"')'", "'!'", "'AND'", "'OR'", "'!='", "'<'", "'<='", "'>'", "'>='", 
 			"'+'", "'-'", "'*'", "'/'", "','", "'''", "'BREAK'", "'CONTINUE'", "'WRITE'", 
 			"'WHILE'", "'DO'", "'IF'", "'THEN'", "'BEGIN'", "'END'", "'CALL'", "'CONST'", 
 			"'VAR'", "'PROCEDURE'"
