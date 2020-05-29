@@ -25,7 +25,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         throw new Exception("No such variable in the table");
     }
 
-    @Override
+   /* @Override
     public Object visitProcedure(isprParser.ProcedureContext ctx) {
         String ident = ctx.ident().getText();
         function.put(ident, ctx.block());
@@ -48,7 +48,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
             e.printStackTrace();
         }
         return null;
-    }
+    } */
     @Override
     public String  visitConsts(isprParser.ConstsContext ctx) {
         currentTable = consts;
@@ -101,11 +101,6 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         return ctx.getText();
     }
 
-   /* @Override
-    public Object visitVars(isprParser.VarsContext ctx) {
-        visitChildren(ctx);
-        return null;
-    }*/
    @Override
    public Object visitVars (isprParser.VarsContext ctx){
        String varName = ctx.ident().getText();
@@ -278,6 +273,17 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         return null;
     }
 
+    @Override
+    public String visitWhilestmt(isprParser.WhilestmtContext ctx) {
+        System.out.println("WHILE: ");
+        Object conditionResult = visit(ctx.conditionunion());
+        while (conditionResult.equals("true")) {
+            for (int i = 0; i < ctx.statement().size(); i++)
+                visit(ctx.statement(i));
+            conditionResult = visit(ctx.conditionunion());
+        }
+        return null;
+    }
 
     @Override
     public String visitConditionunion(isprParser.ConditionunionContext ctx) {

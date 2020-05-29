@@ -1,10 +1,17 @@
-VAR int squ = 3;
+VAR int squ = 4;
 VAR int x = 2;
 VAR int y = 1;
+//PROCEDURE square;
+//BEGIN
+//squ := 2 * x;
+//END;
 BEGIN
-    IF x < squ AND y < x THEN BEGIN
-        squ:= x * 2;
-        x := 2 * squ;
+ //   IF x > squ AND y > x THEN BEGIN
+ //       squ:= x * 2;
+ //       x := 2 * squ;
+ //       CALL square;
+ //   END;
+    WHILE x < squ DO BEGIN
+    x := x + 1;
     END;
-  WRITE(squ);
 END.

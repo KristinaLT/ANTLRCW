@@ -55,7 +55,7 @@ ifstmt
    ;
 
 whilestmt
-   : WHILE condition DO statement
+   : WHILE conditionunion DO BEGIN statement (';' statement)* END
    ;
 
 breakstmt
