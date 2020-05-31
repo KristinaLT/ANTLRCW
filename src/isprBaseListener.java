@@ -39,18 +39,6 @@ public class isprBaseListener implements isprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConsts(isprParser.ConstsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConsts(isprParser.ConstsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterVars(isprParser.VarsContext ctx) { }
 	/**
 	 * {@inheritDoc}

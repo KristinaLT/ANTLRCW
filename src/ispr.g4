@@ -5,13 +5,9 @@ grammar ispr;
    ;
 
 block
-   : consts? (vars*)? (procedure*)? statement
+   : (vars*)? (procedure*)? statement
    ;
 
-
-consts
-   : CONST vars   (';' CONST vars) * ';'
-   ;
 
 vars
    :  VAR type ident ('=' expression)? ';'
@@ -142,12 +138,6 @@ END
 CALL
    : 'CALL'
    ;
-
-
-CONST
-   : 'CONST'
-   ;
-
 
 VAR
    : 'VAR'

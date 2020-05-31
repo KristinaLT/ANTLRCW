@@ -22,12 +22,6 @@ public interface isprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(isprParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link isprParser#consts}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConsts(isprParser.ConstsContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link isprParser#vars}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

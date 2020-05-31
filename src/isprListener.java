@@ -27,16 +27,6 @@ public interface isprListener extends ParseTreeListener {
 	 */
 	void exitBlock(isprParser.BlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link isprParser#consts}.
-	 * @param ctx the parse tree
-	 */
-	void enterConsts(isprParser.ConstsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link isprParser#consts}.
-	 * @param ctx the parse tree
-	 */
-	void exitConsts(isprParser.ConstsContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link isprParser#vars}.
 	 * @param ctx the parse tree
 	 */

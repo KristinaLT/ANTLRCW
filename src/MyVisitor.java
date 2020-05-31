@@ -4,9 +4,7 @@ import java.lang.Override;
 
 
 public class MyVisitor extends isprBaseVisitor<Object> {
-    HashMap<String, Object> consts = new HashMap<>();
     HashMap<String, isprParser.BlockContext> function = new HashMap<>();
-    Stack<HashMap<String, Object>> tables = new Stack<>();
     Stack<HashMap<String, Object>> currentStack;
     HashMap<String, Object> currentTable;
 
@@ -18,14 +16,11 @@ public class MyVisitor extends isprBaseVisitor<Object> {
                 return hm.get(ident);
             }
         }
-        if (consts.containsKey(ident)) {
-            return consts.get(ident);
-        }
 
         throw new Exception("No such variable in the table");
     }
 
-   /* @Override
+    @Override
     public Object visitProcedure(isprParser.ProcedureContext ctx) {
         String ident = ctx.ident().getText();
         function.put(ident, ctx.block());
@@ -36,7 +31,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         if (function.containsKey(ident)) {
             visit(function.get(ident));
         }
-        else throw new Exception("Procedure" + ident + " is not identified");
+        else throw new Exception("PROCEDURE" + ident + " IS NOT IDENTIFIED");
     }
 
     @Override
@@ -47,12 +42,6 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
-    } */
-    @Override
-    public String  visitConsts(isprParser.ConstsContext ctx) {
-        currentTable = consts;
-        visitChildren(ctx);
         return null;
     }
 
@@ -86,9 +75,9 @@ public class MyVisitor extends isprBaseVisitor<Object> {
             Object exp = visit(ctx.expression());
 
             currentTable.put(varName, exp);
-            System.out.println("Assigment " + varName + ": " + exp);
+            System.out.println("ASSIGNMENT VAR: " + varName + ":= " + exp);
         } catch (Exception e) {
-            System.out.println("!!!Error!!!");
+            System.out.println("ERROR");
             System.out.println(e.fillInStackTrace());
         }
         return null;
@@ -110,108 +99,52 @@ public class MyVisitor extends isprBaseVisitor<Object> {
            value = visit(ctx.expression());
        currentTable.put(varName, value);
        if (value != null)
-           System.out.println("Vars: " + type + " " + varName + " " + value.toString());
+           System.out.println("VARS: \n" + "TYPE: " + type + ", VARNAME: " + varName + ", VALUE: " + value.toString());
        else
-           System.out.println("VarDeclaration (no value): " + type + " " + varName + " as NULL");
-
+           System.out.println("VARS: \n " + "TYPE: " + type + ", VARNAME: " + varName + " NULL");
        currentTable.put(varName, value);
-
        return null;
    }
     @Override
-    public String visitMultExpr(isprParser.MultExprContext ctx) {
+    public String visitSummExpr(isprParser.SummExprContext ctx) {
         Object left = visit(ctx.expression(0));
+        Object right = visit(ctx.expression(1));
         String sub = ".";
-        Object right;
-        float delf = 0;
-        float multf = 0;
-        int deli = 0;
-        int multi = 0;
-        boolean flag = false;
-        if (ctx.expression(1) != null) {
-            right = visit(ctx.expression(1));
-        } else {
-            right = new String("0");
-        }
-        String sl = left.toString();
-        String sr = right.toString();
+        boolean flag;
 
-        if (sl.indexOf(sub) != -1 || sr.indexOf(sub)!=-1)
-        {
-            flag = true;
-            float leftfloat = Float.parseFloat(left.toString());
-            float  rightfloat = Float.parseFloat(right.toString());
-            delf = leftfloat / rightfloat;
-            multf = leftfloat * rightfloat;
-        }
-        else {
-
-            flag = false;
-            int lefti = Integer.parseInt(left.toString());
-            int righti = Integer.parseInt(right.toString());
-            deli = lefti / righti;
-            multi = lefti * righti;
-        }
-
+        if (left.toString().indexOf(sub) != -1 || right.toString().indexOf(sub) != -1) flag = true;
+        else flag = false;
         switch (ctx.op.getText()) {
-            case "*":
-                if(flag == true)
-                    return String.valueOf(multf);
-                else
-                    return String.valueOf(multi);
-            case "/": {
-                if(flag == true)
-                    return String.valueOf(delf);
-                else
-                    return String.valueOf(deli);
-            }
+
+            case "+":
+                if (flag == true) return String.valueOf(Float.parseFloat(left.toString())+Float.parseFloat(right.toString()));
+                else return String.valueOf(Integer.parseInt(left.toString())+Integer.parseInt(right.toString()));
+
+            case "-":
+                if (flag == true) return String.valueOf(Float.parseFloat(left.toString())-Float.parseFloat(right.toString()));
+                else return String.valueOf(Integer.parseInt(left.toString())-Integer.parseInt(right.toString()));
         }
         return null;
     }
 
     @Override
-    public String visitSummExpr(isprParser.SummExprContext ctx) {
+    public String visitMultExpr(isprParser.MultExprContext ctx) {
         Object left = visit(ctx.expression(0));
+        Object right = visit(ctx.expression(1));
         String sub = ".";
-        Object right;
-        float summf = 0;
-        float differf = 0;
-        int summi = 0;
-        int differi = 0;
-        boolean flag = false;
-        if (ctx.expression(1) != null) {
-            right = visit(ctx.expression(1));
-        } else {
-            right = new String("0");
-        }
-        String sl = left.toString();
-        String sr = right.toString();
-        if (sl.indexOf(sub) != -1 || sr.indexOf(sub) != -1) {
-            flag = true;
-            float leftf = Float.parseFloat(left.toString());
-            float rightf = Float.parseFloat(right.toString());
-            summf = leftf + rightf;
-            differf = leftf - rightf;
-        } else {
-            flag = false;
-            int lefti = Integer.parseInt(left.toString());
-            int righti = Integer.parseInt(right.toString());
-            summi = lefti + righti;
-            differi = lefti - righti;
-        }
+        boolean flag;
 
+        if (left.toString().indexOf(sub) != -1 || right.toString().indexOf(sub)!=-1) flag = true;
+        else flag = false;
         switch (ctx.op.getText()) {
-            case "+":
-                if (flag == true)
-                    return String.valueOf(summf);
-                else
-                    return String.valueOf(summi);
-            case "-": {
-                if (flag == true)
-                    return String.valueOf(differf);
-                else
-                    return String.valueOf(differi);
-            }
+
+            case "*":
+                if(flag==true) return String.valueOf(Float.parseFloat(left.toString()) * Float.parseFloat(right.toString()));
+                else return String.valueOf(Integer.parseInt(left.toString()) * Integer.parseInt(right.toString()));
+
+            case "/":
+                if (flag == true) return String.valueOf(Float.parseFloat(left.toString()) / Float.parseFloat(right.toString()));
+                else return String.valueOf(Integer.parseInt(left.toString()) / Integer.parseInt(right.toString()));
         }
         return null;
     }
@@ -219,9 +152,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
     @Override
     public String visitWritestmt(isprParser.WritestmtContext ctx) {
         String toPrint = (String) visit(ctx.expressionunion());
-      //  toPrint +=(String)visit(ctx.ident());
-
-        System.out.println("write( " + toPrint + ")");
+        System.out.println("WRITE: " + toPrint);
         return null;
     }
     @Override
@@ -237,34 +168,17 @@ public class MyVisitor extends isprBaseVisitor<Object> {
    @Override
     public Object visitIdent (isprParser.IdentContext ctx) {
         try {
-            System.out.println("GetVariable:" + ctx.getText() + " is: " + getVariable(ctx.getText()));
+            System.out.println("RECEIVE VARS: " + ctx.getText() + " := " + getVariable(ctx.getText()));
             return getVariable(ctx.getText());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
- @Override
-    public String visitLiteral (isprParser.LiteralContext ctx){
-        if (ctx.charLiteral()!= null) return ctx.charLiteral().STRING().getText();
-        return ctx.getText();
-    }
-
- @Override
-    public Object visitFloatLiteral (isprParser.FloatLiteralContext ctx){
-        System.out.println("Float: " + ctx.getText());
-        return Float.parseFloat(ctx.getText());
-    }
-
-    @Override
-    public Object visitIntegerLiteral (isprParser.IntegerLiteralContext ctx){
-        System.out.println("Integer: " + ctx.getText());
-        return Integer.parseInt(ctx.getText());
-    }
 
     @Override
     public String visitIfstmt(isprParser.IfstmtContext ctx) {
-        System.out.println("if:");
+        System.out.println("IF: ");
         Object conditionResult = visit(ctx.conditionunion());
         if (conditionResult.equals("true")) {
             visit(ctx.statement(0));
@@ -290,7 +204,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         for (int i = 0; i < ctx.condition().size(); i++) {
             Object result = visitChildren(ctx);
             if (result == null) {
-                System.err.println("Conclusion NULL exception");
+                System.err.println("NULL exception");
                 System.exit(1);
             }
             if (result.equals("false")) return "false";
@@ -303,11 +217,9 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         Object left = visit(ctx.expression(0));
         Object right = visit(ctx.expression(1));
         String sub = ".";
-        boolean flag = false;
+        boolean flag;
 
-        String sl = left.toString();
-        String sr = right.toString();
-        if (sl.indexOf(sub) != -1 || sr.indexOf(sub) != -1)
+        if (left.toString().indexOf(sub) != -1 || right.toString().indexOf(sub) != -1)
             flag = true;
         else {
             flag = false;
@@ -335,6 +247,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
                         return "true";
                     else return "false";
                 }
+
             case "<":
                 if (flag == true) {
                     if (Float.parseFloat(left.toString()) < Float.parseFloat(right.toString()))
@@ -345,6 +258,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
                         return "true";
                     else return "false";
                 }
+
             case "<=":
                 if (flag == true) {
                     if (Float.parseFloat(left.toString()) <= Float.parseFloat(right.toString()))
@@ -355,6 +269,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
                         return "true";
                     else return "false";
                 }
+
             case ">":
                 if (flag == true) {
                     if (Float.parseFloat(left.toString()) > Float.parseFloat(right.toString()))
@@ -365,6 +280,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
                         return "true";
                     else return "false";
                 }
+
             case ">=":
                 if (flag == true) {
                     if (Float.parseFloat(left.toString()) >= Float.parseFloat(right.toString()))
@@ -378,9 +294,4 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         }
         return null;
     }
-
-
-
-
-
 }
