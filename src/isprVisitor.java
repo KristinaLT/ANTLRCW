@@ -28,17 +28,11 @@ public interface isprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVars(isprParser.VarsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link isprParser#type}.
+	 * Visit a parse tree produced by {@link isprParser#beginstmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitType(isprParser.TypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link isprParser#procedure}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitProcedure(isprParser.ProcedureContext ctx);
+	T visitBeginstmt(isprParser.BeginstmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link isprParser#statement}.
 	 * @param ctx the parse tree
@@ -51,6 +45,12 @@ public interface isprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssignstmt(isprParser.AssignstmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link isprParser#procedure}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProcedure(isprParser.ProcedureContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link isprParser#callstmt}.
 	 * @param ctx the parse tree
@@ -69,12 +69,6 @@ public interface isprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBangstmt(isprParser.BangstmtContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link isprParser#beginstmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBeginstmt(isprParser.BeginstmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link isprParser#ifstmt}.
 	 * @param ctx the parse tree
@@ -176,6 +170,12 @@ public interface isprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCharLiteral(isprParser.CharLiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link isprParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(isprParser.TypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link isprParser#ident}.
 	 * @param ctx the parse tree

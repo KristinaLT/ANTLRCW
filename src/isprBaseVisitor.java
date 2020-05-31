@@ -37,14 +37,7 @@ public class isprBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitType(isprParser.TypeContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitProcedure(isprParser.ProcedureContext ctx) { return visitChildren(ctx); }
+	@Override public T visitBeginstmt(isprParser.BeginstmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -59,6 +52,13 @@ public class isprBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements i
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitAssignstmt(isprParser.AssignstmtContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitProcedure(isprParser.ProcedureContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -80,13 +80,6 @@ public class isprBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements i
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitBangstmt(isprParser.BangstmtContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitBeginstmt(isprParser.BeginstmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -199,6 +192,13 @@ public class isprBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements i
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitCharLiteral(isprParser.CharLiteralContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitType(isprParser.TypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

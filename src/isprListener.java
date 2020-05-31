@@ -37,25 +37,15 @@ public interface isprListener extends ParseTreeListener {
 	 */
 	void exitVars(isprParser.VarsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link isprParser#type}.
+	 * Enter a parse tree produced by {@link isprParser#beginstmt}.
 	 * @param ctx the parse tree
 	 */
-	void enterType(isprParser.TypeContext ctx);
+	void enterBeginstmt(isprParser.BeginstmtContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link isprParser#type}.
+	 * Exit a parse tree produced by {@link isprParser#beginstmt}.
 	 * @param ctx the parse tree
 	 */
-	void exitType(isprParser.TypeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link isprParser#procedure}.
-	 * @param ctx the parse tree
-	 */
-	void enterProcedure(isprParser.ProcedureContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link isprParser#procedure}.
-	 * @param ctx the parse tree
-	 */
-	void exitProcedure(isprParser.ProcedureContext ctx);
+	void exitBeginstmt(isprParser.BeginstmtContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link isprParser#statement}.
 	 * @param ctx the parse tree
@@ -76,6 +66,16 @@ public interface isprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssignstmt(isprParser.AssignstmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link isprParser#procedure}.
+	 * @param ctx the parse tree
+	 */
+	void enterProcedure(isprParser.ProcedureContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link isprParser#procedure}.
+	 * @param ctx the parse tree
+	 */
+	void exitProcedure(isprParser.ProcedureContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link isprParser#callstmt}.
 	 * @param ctx the parse tree
@@ -106,16 +106,6 @@ public interface isprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBangstmt(isprParser.BangstmtContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link isprParser#beginstmt}.
-	 * @param ctx the parse tree
-	 */
-	void enterBeginstmt(isprParser.BeginstmtContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link isprParser#beginstmt}.
-	 * @param ctx the parse tree
-	 */
-	void exitBeginstmt(isprParser.BeginstmtContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link isprParser#ifstmt}.
 	 * @param ctx the parse tree
@@ -286,6 +276,16 @@ public interface isprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCharLiteral(isprParser.CharLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link isprParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterType(isprParser.TypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link isprParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitType(isprParser.TypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link isprParser#ident}.
 	 * @param ctx the parse tree

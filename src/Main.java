@@ -14,7 +14,6 @@ public class Main {
               System.out.println(input);
             isprLexer lexer = new isprLexer(input);
             isprParser parser = new isprParser(new CommonTokenStream(lexer));
-           // parser.addParseListener(new MyListener());
             ParseTree tree = parser.program();
             MyVisitor visitor = new MyVisitor();
             visitor.visit(tree);

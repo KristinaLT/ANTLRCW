@@ -181,8 +181,8 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         System.out.println("IF: ");
         Object conditionResult = visit(ctx.conditionunion());
         if (conditionResult.equals("true")) {
-            visit(ctx.statement(0));
-            visitChildren(ctx);
+            for (int i = 0; i < ctx.statement().size(); i++)
+                visit(ctx.statement(i));
         }
         return null;
     }

@@ -1,9 +1,18 @@
-VAR int g = 9;
-VAR int r = 4;
+VAR int a = 10;
+VAR int b = 9;
+VAR int e = 1;
+VAR float i = 1.0;
+VAR float c = 4.75;
+VAR float d = 4.75;
 BEGIN
-IF g = r THEN BEGIN
-g := 33;
-WRITE (g);
-END;
-WRITE (g);
+
+IF a != b AND a > b THEN BEGIN
+    e := a + b;
+    END;
+WRITE (e);
+
+IF c < i OR c = d THEN BEGIN
+    i := i + i;
+    END;
+
 END.

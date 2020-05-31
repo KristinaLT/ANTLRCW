@@ -51,25 +51,13 @@ public class isprBaseListener implements isprListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterType(isprParser.TypeContext ctx) { }
+	@Override public void enterBeginstmt(isprParser.BeginstmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitType(isprParser.TypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterProcedure(isprParser.ProcedureContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitProcedure(isprParser.ProcedureContext ctx) { }
+	@Override public void exitBeginstmt(isprParser.BeginstmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -94,6 +82,18 @@ public class isprBaseListener implements isprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssignstmt(isprParser.AssignstmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProcedure(isprParser.ProcedureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProcedure(isprParser.ProcedureContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -130,18 +130,6 @@ public class isprBaseListener implements isprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBangstmt(isprParser.BangstmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBeginstmt(isprParser.BeginstmtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBeginstmt(isprParser.BeginstmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -334,6 +322,18 @@ public class isprBaseListener implements isprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCharLiteral(isprParser.CharLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterType(isprParser.TypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitType(isprParser.TypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
