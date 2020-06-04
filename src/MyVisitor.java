@@ -7,6 +7,8 @@ public class MyVisitor extends isprBaseVisitor<Object> {
     HashMap<String, isprParser.BlockContext> function = new HashMap<>();
     Stack<HashMap<String, Object>> currentStack;
     HashMap<String, Object> currentTable;
+    String procedure = "";
+    boolean global = false;
 
     private Object getVariable(String ident) throws Exception {
         if (currentTable.containsKey(ident))
@@ -18,6 +20,19 @@ public class MyVisitor extends isprBaseVisitor<Object> {
         }
 
         throw new Exception("No such variable in the table");
+    }
+
+    @Override
+    public Object visitBreakstmt(isprParser.BreakstmtContext ctx) {
+        System.out.println("BREAK");
+        LLVM.Break();
+        return null;
+    }
+
+    @Override
+    public Object visitContinuestmt(isprParser.ContinuestmtContext ctx) {
+        LLVM.Continue();
+        return null;
     }
 
     @Override
@@ -49,14 +64,18 @@ public class MyVisitor extends isprBaseVisitor<Object> {
     public String visitProgram (isprParser.ProgramContext ctx)
     {
         visitChildren(ctx);
+        LLVM.generate();
         return null;
     }
 
     @Override
     public String visitBlock (isprParser.BlockContext ctx){
         HashMap<String, Object> currentBlocktable = new HashMap<>();
+        String id = ctx.statement().getText();
         currentTable = currentBlocktable;
+        LLVM.function_start(id);
         visitChildren(ctx);
+        LLVM.function_end();
 
         return null;
     }
@@ -72,19 +91,35 @@ public class MyVisitor extends isprBaseVisitor<Object> {
     public String  visitAssignstmt(isprParser.AssignstmtContext ctx) {
         try {
             String varName = ctx.ident().getText();
-            Object exp = visit(ctx.expression());
+            Object value = visit(ctx.expression());
+            Object left = visit(ctx.expression());
+            Object right = visit(ctx.expression());
 
-            currentTable.put(varName, exp);
-            System.out.println("ASSIGNMENT VAR: " + varName + ":= " + exp);
+            if (ctx.children.contains(ctx.expression())) value = visit(ctx.expression());
+            currentTable.put(varName, value);
+            currentTable.put(varName, value);
+            String sub=".";
+
+            if (left.toString().contains(sub) || right.toString().contains(sub)) {
+                if (value == null)
+                    value = 0;
+                LLVM.assign_double(varName,  global,value);
+            } else {
+                if (value == null)
+                    value = 0;
+                LLVM.assign_i32(varName, global,value);
+            }
+
         } catch (Exception e) {
-            System.out.println("ERROR");
+            System.out.println("!!!Error!!!");
             System.out.println(e.fillInStackTrace());
         }
         return null;
     }
 
 
-   @Override
+
+    @Override
     public String visitFactor (isprParser.FactorContext ctx){
         if (ctx.ident()!= null) return (String) visitChildren(ctx);;
         return ctx.getText();
@@ -95,14 +130,20 @@ public class MyVisitor extends isprBaseVisitor<Object> {
        String varName = ctx.ident().getText();
        String type = ctx.type().getText();
        Object value = visit(ctx.expression());
-       if (ctx.children.contains(ctx.expression()))
-           value = visit(ctx.expression());
        currentTable.put(varName, value);
-       if (value != null)
-           System.out.println("VARS: \n" + "TYPE: " + type + ", VARNAME: " + varName + ", VALUE: " + value.toString());
-       else
-           System.out.println("VARS: \n " + "TYPE: " + type + ", VARNAME: " + varName + " NULL");
-       currentTable.put(varName, value);
+       if (type.equals ("int")) {
+           if (value == null)
+               value = 0;
+           LLVM.declare_i32(varName, global, value);
+       } else {
+           if (type.equals ("float"))
+           {
+               if (value == null)
+                   value = 0;
+               LLVM.declare_double(varName, global, value);
+           }
+
+       }
        return null;
    }
     @Override
@@ -153,8 +194,28 @@ public class MyVisitor extends isprBaseVisitor<Object> {
     public String visitWritestmt(isprParser.WritestmtContext ctx) {
         String toPrint = (String) visit(ctx.expressionunion());
         System.out.println("WRITE: " + toPrint);
+        Object left = visit(ctx.expressionunion());
+        String sub = ".";
+        boolean flag = false;
+        boolean type;
+        if (left.toString().contains(sub)) type = true;
+        else type = false;
+        if (left.toString().contains("'")) flag = true;
+
+        if (flag == true) {
+            LLVM.printf_string(toPrint, toPrint.length(), global, procedure);
+            LLVM.print(toPrint);
+            if (type == true) {
+                LLVM.printf_double(toPrint, global);
+                LLVM.print(toPrint);
+            } else {
+                LLVM.printf_i32(toPrint, global);
+                LLVM.print(toPrint);
+            }
+        }
         return null;
     }
+
     @Override
     public String visitExpressionunion(isprParser.ExpressionunionContext ctx) {
         StringBuilder result = new StringBuilder();
@@ -180,6 +241,7 @@ public class MyVisitor extends isprBaseVisitor<Object> {
     public String visitIfstmt(isprParser.IfstmtContext ctx) {
         System.out.println("IF: ");
         Object conditionResult = visit(ctx.conditionunion());
+        LLVM.if_start((String)conditionResult);
         if (conditionResult.equals("true")) {
             for (int i = 0; i < ctx.statement().size(); i++)
                 visit(ctx.statement(i));
@@ -189,13 +251,17 @@ public class MyVisitor extends isprBaseVisitor<Object> {
 
     @Override
     public String visitWhilestmt(isprParser.WhilestmtContext ctx) {
+
         System.out.println("WHILE: ");
+        LLVM.while_start();
         Object conditionResult = visit(ctx.conditionunion());
+        LLVM.while_condition((String)conditionResult);
         while (conditionResult.equals("true")) {
             for (int i = 0; i < ctx.statement().size(); i++)
                 visit(ctx.statement(i));
             conditionResult = visit(ctx.conditionunion());
         }
+        LLVM.while_end();
         return null;
     }
 

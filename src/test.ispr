@@ -6,13 +6,9 @@ VAR float c = 4.75;
 VAR float d = 4.75;
 BEGIN
 
-IF a != b AND a > b THEN BEGIN
+IF e < 9  THEN
+    BEGIN
     e := a + b;
     END;
 WRITE (e);
-
-IF c < i OR c = d THEN BEGIN
-    i := i + i;
-    END;
-
 END.
