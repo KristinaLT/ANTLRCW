@@ -8,6 +8,8 @@ declare i32 @scanf(i8*, ...)
 
 @x = global double 0.0
 @squ = global double 0.0
+@str0 = constant[3 x i8] c" \0A\00"
+@str1 = constant[3 x i8] c" \0A\00"
 define i32 @main() nounwind {
   store double 7.0, double* @x
   br label %while1
@@ -22,7 +24,9 @@ define i32 @main() nounwind {
   false1:
   %1 = load double, double* @x
   %2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %1)
-  %3 = load double, double* @squ
-  %4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %3)
+  %3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ( [3 x i8], [3 x i8]* @str0, i32 0, i32 0))
+  %4 = load double, double* @squ
+  %5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %4)
+  %6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ( [3 x i8], [3 x i8]* @str1, i32 0, i32 0))
   ret i32 0
 }
