@@ -6,7 +6,7 @@ declare i32 @scanf(i8*, ...)
 @strsi = constant [3 x i8] c"%d\00"
 @strsd = constant [4 x i8] c"%lf\00"
 
-define i32 @funct() nounwind {
+define i32 @main() nounwind {
   %x = alloca double
   %squ = alloca double
   store double 7.0, double* %x
