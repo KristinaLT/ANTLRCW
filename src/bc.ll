@@ -7,12 +7,12 @@ declare i32 @scanf(i8*, ...)
 @strsd = constant [4 x i8] c"%lf\00"
 
 define i32 @funct() nounwind {
-  %a = alloca i32 10
-  %b = alloca i32 9
-  %e = alloca i32 1
-  %i = alloca double 1.0
-  %c = alloca double 4.75
-  %d = alloca double 4.75
+  %a = alloca i32
+  %b = alloca i32
+  %e = alloca i32
+  %i = alloca double
+  %c = alloca double
+  %d = alloca double
   br i1 %true, label %true1, label %false1
   true1:
   store i32 19, i32* % e
