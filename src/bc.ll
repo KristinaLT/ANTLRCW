@@ -6,15 +6,26 @@ declare i32 @scanf(i8*, ...)
 @strsi = constant [3 x i8] c"%d\00"
 @strsd = constant [4 x i8] c"%lf\00"
 
+@str0 = constant[11 x i8] c"'stroka' \0A\00"
+@str1 = constant[11 x i8] c"'stroka' \0A\00"
 define i32 @funct() nounwind {
-  %a = alloca i32
-  %b = alloca i32
-  %e = alloca i32
-  %i = alloca double
-  %c = alloca double
-  %d = alloca double
-  br i1 %true, label %true1, label %false1
+  %x = alloca double
+  %squ = alloca double
+  store double 7.0, double* %x
+  br label %while1
+  while1:
+  br i1 true, label %true1, label %false1
   true1:
-  store i32 19, i32* %e
+  store double 8.0, double* %x
+  store double 20.0, double* %squ
+  store double 9.0, double* %x
+  store double 200.0, double* %squ
+  br label %while1
+  false1:
+  %1 = getelementptr inbounds [10 x i8], [10 x i8]* @.'stroka' , i32 0, i32 0
+  %3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ( [11 x i8], [11 x i8]* @str 0, i32 0, i32 0))
+  %4 = load i32, i32* %'stroka' 
+  %5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %4)
+  %6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ( [11 x i8], [11 x i8]* @str 1, i32 0, i32 0))
   ret i32 0
 }
