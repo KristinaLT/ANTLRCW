@@ -15,6 +15,6 @@ define i32 @funct() nounwind {
   %d = alloca double
   br i1 %true, label %true1, label %false1
   true1:
-  store i32 19, i32* % e
+  store i32 19, i32* %e
   ret i32 0
 }
