@@ -6,8 +6,8 @@ declare i32 @scanf(i8*, ...)
 @strsi = constant [3 x i8] c"%d\00"
 @strsd = constant [4 x i8] c"%lf\00"
 
-@x = global double
-@squ = global double
+@x = global double 0.0
+@squ = global double 0.0
 @str0 = constant[6 x i8] c"9.0 \0A\00"
 @str1 = constant[8 x i8] c"200.0 \0A\00"
 define i32 @main() nounwind {
