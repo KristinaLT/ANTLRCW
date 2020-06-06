@@ -6,7 +6,7 @@ declare i32 @scanf(i8*, ...)
 @strsi = constant [3 x i8] c"%d\00"
 @strsd = constant [4 x i8] c"%lf\00"
 
-define main @ BEGINIFe<9THENBEGINe:=a+b;END;WRITE(e);END () nounwind {
+define i32 @funct() nounwind {
   %a = alloca i32 10
   %b = alloca i32 9
   %e = alloca i32 1
@@ -16,10 +16,5 @@ define main @ BEGINIFe<9THENBEGINe:=a+b;END;WRITE(e);END () nounwind {
   br i1 %true, label %true1, label %false1
   true1:
   store i32 19, i32* % e
-  ret void
-}
-
-define i32 @funct() nounwind {
-  
   ret i32 0
 }
