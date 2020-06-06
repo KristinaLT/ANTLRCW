@@ -14,7 +14,7 @@ define i32 @main() nounwind {
   store double 7.0, double* @x
   br label %while1
   while1:
-  br i1 true, label %true1, label %false1
+  br i1 %0, label %true1, label %false1
   true1:
   store double 8.0, double* @x
   store double 20.0, double* @squ
