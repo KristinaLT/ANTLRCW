@@ -22,10 +22,10 @@ define i32 @main() nounwind {
   store double 200.0, double* @squ
   br label %while1
   false1:
-  %1 = load double, double* @9.0 
+  %1 = load double, double* @x
   %2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %1)
   %3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ( [6 x i8], [6 x i8]* @str0, i32 0, i32 0))
-  %4 = load double, double* @200.0 
+  %4 = load double, double* @squ
   %5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %4)
   %6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ( [8 x i8], [8 x i8]* @str1, i32 0, i32 0))
   ret i32 0
