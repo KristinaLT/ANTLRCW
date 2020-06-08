@@ -13,16 +13,3 @@ WHILE e < 9  DO
 WRITE (e);
 WRITE (b);
 END.
-/*VAR float x = 1.0;
-VAR float squ = 2.0;
-
-BEGIN
-x := 14 / squ;
-WHILE x != 9.0 DO
-BEGIN
-x := x + 1;
-squ := squ * 10;
-END;
-WRITE (x);
-WRITE (squ);
-END.*/

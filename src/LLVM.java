@@ -1,6 +1,5 @@
 import java.util.Stack;
 import java.io.FileWriter;
-import java.util.HashSet;
 
 
 
@@ -44,29 +43,6 @@ public class LLVM  {
         return text;
     }
 
-    // functions
-    static void function_start(String id) {
-        main_text += buffer;
-        main_reg = reg;
-        buffer = "define main @ " + id + " () nounwind {\n";
-        reg = 1;
-    }
-
-    static void function_end() {
-        buffer += "ret void\n";
-        formatBuffer();
-        buffer += "}\n\n";
-        header_text += buffer;
-        buffer = "";
-        reg = main_reg;
-    }
-
-    static void call(String id) {
-        buffer += "call void @" + id + "()\n";
-
-    }
-
-    // printf
     static void print(String text) {
         int str_len = text.length();
 
@@ -106,14 +82,7 @@ public class LLVM  {
             buffer += "%" + reg + " = getelementptr inbounds [" + (length + 1) + " x i8], [" + (length + 1) + " x i8]* @" + function + "." + id + ", i32 0, i32 0\n";
         }
         reg++;
-        //  buffer += "%" + reg + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strps, i32 0, i32 0), i8* %" + (reg - 1) + ")\n";
         reg++;
-    }
-    //perevod is int in float
-    static int tr_int_to_float(int _reg) {
-        buffer += "%" + reg + " = sitofp i64 %" + _reg + " to double\n";
-        reg++;
-        return reg - 1;
     }
 
     static void declare_i32(String id, boolean global,Object value) {
@@ -132,7 +101,7 @@ public class LLVM  {
         }
     }
 
-    // assign
+
     static void assign_i32(String id,  boolean globalNames,Object value) {
         if (globalNames) {
             buffer += "store i32 " + value+ ", i32* @" + id + "\n";
@@ -149,62 +118,6 @@ public class LLVM  {
         }
     }
 
-    static void assign_string(String id, String text, boolean global, String function) {
-        int len = text.length() + 1;
-        String str_type = "[" + len + " x i8]";
-        if (global) {
-            header_text += "@" + id + " = constant" + str_type + " c\"" + text + "\\00\"\n";
-        } else {
-            header_text += "@" + function + "." + id + " = constant" + str_type + " c\"" + text + "\\00\"\n";
-        }
-    }
-
-    // add
-    static void add_i32(String val1, String val2) {
-        buffer += "%" + reg + " = add i32 " + val1 + ", " + val2 + "\n";
-        reg++;
-    }
-
-    static void add_double(String val1, String val2) {
-        buffer += "%" + reg + " = fadd double " + val1 + ", " + val2 + "\n";
-        reg++;
-    }
-
-    // mul
-    static void mul_i32(String val1, String val2) {
-        buffer += "%" + reg + " = mul i32 " + val1 + ", " + val2 + "\n";
-        reg++;
-    }
-
-    static void mul_double(String val1, String val2) {
-        buffer += "%" + reg + " = fmul double " + val1 + ", " + val2 + "\n";
-        reg++;
-    }
-
-    // sub
-    static void sub_i32(String val1, String val2) {
-        buffer += "%" + reg + " = sub i32 " + val1 + ", " + val2 + "\n";
-        reg++;
-    }
-
-    static void sub_double(String val1, String val2) {
-        buffer += "%" + reg + " = fsub double " + val1 + ", " + val2 + "\n";
-        reg++;
-    }
-
-    //div
-    static void div_i32(String val1, String val2) {
-        buffer += "%" + reg + " = sdiv i32 " + val1 + ", " + val2 + "\n";
-        reg++;
-    }
-
-    static void div_double(String val1, String val2) {
-        buffer += "%" + reg + " = fdiv double " + val1 + ", " + val2 + "\n";
-        reg++;
-    }
-
-
-    // load
     static void load_i32(String id) {
             buffer += "%" + reg + " = load i32, i32* @" + id + "\n";
             reg++;
@@ -226,6 +139,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void eq1(String value, String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp eq i32 %" + (reg - 1) + ", " + value + "\n";
@@ -235,6 +149,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void eq0(String value1, String value2, String type){
 
         if (type.equals("INTEGER")) {
@@ -255,6 +170,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void noeq1(String value, String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp ne i32 %" + (reg - 1) + ", " + value + "\n";
@@ -264,6 +180,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void noeq0(String value1, String value2, String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp ne i32 " + value1 + ", " + value2 + "\n";
@@ -273,6 +190,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void more2(String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp sgt i32 %" + (reg - 2) + ", %" + (reg - 1) + "\n";
@@ -313,6 +231,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void less2(String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp slt i32 %" + (reg - 2) + ", %" + (reg - 1) + "\n";
@@ -322,6 +241,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void less1_1(String value, String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp slt i32 %" + (reg - 1) + ", " + value + "\n";
@@ -341,6 +261,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void less0(String value1, String value2, String type) {
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp slt i32 " + value1 + ", " + value2 + "\n";
@@ -350,6 +271,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void moreeq2(String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp sge i32 %" + (reg - 2) + ", %" + (reg - 1) + "\n";
@@ -359,6 +281,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void moreeq1_1(String value, String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp sge i32 %" + (reg - 1) + ", " + value + "\n";
@@ -388,6 +311,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void lesseq2(String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp sle i32 %" + (reg - 2) + ", %" + (reg - 1) + "\n";
@@ -397,6 +321,7 @@ public class LLVM  {
         }
         reg++;
     }
+
     static void lesseq1_1(String value, String type){
         if (type.equals("INTEGER")) {
             buffer += "%" + reg + " = icmp sle i32 %" + (reg - 1) + ", " + value + "\n";
@@ -426,27 +351,6 @@ public class LLVM  {
         }
         reg++;
     }
-    static void or(Integer val1, Integer val2) {
-        buffer += "%" + reg + " = or i1 %" + val1 + ", %" + val2 + "\n";
-        reg++;
-    }
-
-
-
-    static void and(Integer val1, Integer val2) {
-        buffer += "%" + reg + " = and i1 %" + val1 + ", %" + val2 + "\n";
-        reg++;
-    }
-
-
-    // if
-   /* static void icmp(String id, String value, HashSet<String> globalNames) {
-        load_i32(id);
-        buffer += "%" + reg + " = icmp eq i32 %" + (reg - 1) + ", " + value + "\n";
-        reg++;
-    }
-    */
-
 
     static void if_start() {
         br++;
@@ -461,21 +365,6 @@ public class LLVM  {
         buffer += "false" + b + ":\n";
     }
 
-
-
-
-    static void sitofp(String id) {
-        buffer += "%" + reg + " = sitofp i32 " + id + " to double\n";
-        reg++;
-    }
-
-    static void fptosi(String id) {
-        buffer += "%" + reg + " = fptosi double " + id + " to i32\n";
-        reg++;
-    }
-
-
-    // helpers
     private static void formatBuffer() {
         String[] lines = buffer.split("\n");
         StringBuilder sb = new StringBuilder();
@@ -494,7 +383,7 @@ public class LLVM  {
         }
         main_text = sb.toString();
     }
-    //while
+
     static void while_start() {
         stack_pop = false;
         br++;
@@ -505,12 +394,6 @@ public class LLVM  {
 
     static void while_condition(int ref) {
         buffer += "br i1 %" + ref + ", label %true" + br + ", label %false" + br + "\n";
-        buffer += "true" + br + ":\n";
-        br_stack.push(br);
-    }
-
-    static void while_condition(String val) {
-        buffer += "br i1 " + val +", label %true" + br + ", label %false" + br + "\n";
         buffer += "true" + br + ":\n";
         br_stack.push(br);
     }
